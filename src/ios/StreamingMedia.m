@@ -27,6 +27,7 @@
     NSString *videoType;
     AVPlayer *movie;
     BOOL controls;
+    BOOL playbackBegins;
 }
 
 NSString * const TYPE_VIDEO = @"VIDEO";
@@ -58,6 +59,12 @@ NSString * const DEFAULT_IMAGE_SCALE = @"center";
         controls = [[options objectForKey:@"controls"] boolValue];
     } else {
         controls = YES;
+    }
+       
+    if (![options isKindOfClass:[NSNull class]] && [options objectForKey:@"playbackBegins"]) {
+        playbackBegins = [[options objectForKey:@"playbackBegins"] boolValue];
+    } else {
+        playbackBegins = YES;
     }
     
     if ([type isEqualToString:TYPE_AUDIO]) {
@@ -223,7 +230,7 @@ NSString * const DEFAULT_IMAGE_SCALE = @"center";
     [moviePlayer setShowsPlaybackControls:controls];
     [moviePlayer setUpdatesNowPlayingInfoCenter:YES];
     
-    if(@available(iOS 11.0, *)) { [moviePlayer setEntersFullScreenWhenPlaybackBegins:YES]; }
+    if(@available(iOS 11.0, *)) { [moviePlayer setEntersFullScreenWhenPlaybackBegins:playbackBegins]; }
     
     // present modally so we get a close button
     [self.viewController presentViewController:moviePlayer animated:YES completion:^(void){
